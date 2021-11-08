@@ -1,0 +1,1 @@
+﻿-h mft.theice.com  -o "F:\Data\ICE\MFT\icemftendex.csv" -r /EndOfDayReports/ICE_Endex/Futures -k F:\Keys\new_icetradingmft_openssh.ppk -f "icefutures_EOD_endex_futures_2021_11_05.csv" -u IMD_altatradingukli_1 -a PublicPrivatekey -c SFTP

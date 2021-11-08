@@ -1,0 +1,1 @@
+﻿This is list of command line arguments for launchsettings.json while dedugging  

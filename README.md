@@ -1,0 +1,1 @@
+To use FtpReader, override the BroadcastArgs object so that it passes the required information the implementation of IBroadcaster (that you also need to create)
