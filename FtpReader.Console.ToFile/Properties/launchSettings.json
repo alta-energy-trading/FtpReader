@@ -2,7 +2,7 @@
   "profiles": {
     "FtpReader.Console.ToFile": {
       "commandName": "Project",
-      "commandLineArgs": "-h mft.theice.com  -o \"F:\\Data\\ICE\\MFT\\icemftendex.csv\" -r /EndOfDayReports/ICE_Endex/Futures -k F:\\Keys\\new_icetradingmft_openssh.ppk -f \"icefutures_EOD_endex_futures_2021_11_05.csv\" -u IMD_altatradingukli_1 -a PublicPrivatekey -c SFTP"
+      "commandLineArgs": "-h ftp.rystadenergy.com  -o \"F:\\Data\\RystadOilCube\" -r /OilMarketCube/ -u ftpaltatradinguser01 -p 5tgb%TGB1qaz!QAZ -f Asset.csv AssetCompany.csv -a Basic -c SFTP"
     }
   }
 }

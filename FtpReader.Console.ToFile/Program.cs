@@ -36,7 +36,7 @@ namespace FtpReader.Console.ToFile
 
             try
             {
-                Log.Information("FtpReader Starting.");
+                Log.Information("FtpReader Starting");
 
                 Parser.Default.ParseArguments<Options>(args)
                     .WithParsed(o =>
@@ -44,11 +44,11 @@ namespace FtpReader.Console.ToFile
                         Run(serviceProvider, o).Wait();
                     });
 
-                Log.Information("FtpReader Complete.");
+                Log.Information("FtpReader Complete");
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "FtpReader encountered an error.");
+                Log.Fatal(ex, "FtpReader encountered an error");
             }
             finally
             {
