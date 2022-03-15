@@ -1,1 +1,1 @@
-﻿-h ftp.rystadenergy.com  -o "F:\Data\RystadOilCube" -r /OilMarketCube/ -u ftpaltatradinguser01 -p 5tgb%TGB1qaz!QAZ -f Asset.csv AssetCompany.csv -a Basic -c SFTP
+﻿-h ftp.rystadenergy.com  -o "F:\Data\RystadOilCube" -r /OilMarketCube/ -u ftpaltatradinguser01 -p 5tgb%TGB1qaz!QAZ -a Basic -c SFTP

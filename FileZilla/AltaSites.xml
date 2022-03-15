@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FileZilla3 version="3.51.0" platform="windows">
+	<Servers>
+		<Server>
+			<Host>ftp.cmegroup.com</Host>
+			<Port>21</Port>
+			<Protocol>0</Protocol>
+			<Type>1</Type>
+			<Logontype>0</Logontype>
+			<PasvMode>MODE_DEFAULT</PasvMode>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>CME</Name>
+			<RemoteDir>1 0 6 settle</RemoteDir>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+		<Server>
+			<Host>mft.theice.com</Host>
+			<Port>22</Port>
+			<Protocol>1</Protocol>
+			<Type>0</Type>
+			<User>IMD_altatradingukli_1</User>
+			<Keyfile>C:\Users\henryt\Downloads\new_icetradingmft.ppk</Keyfile>
+			<Logontype>5</Logontype>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>ICE MFT</Name>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+		<Server>
+			<Host>ftp.industrialinfo.com</Host>
+			<Port>21</Port>
+			<Protocol>0</Protocol>
+			<Type>1</Type>
+			<User>arcadia</User>
+			<Pass encoding="base64">QjVlcGh1a1V0aGlG</Pass>
+			<Logontype>1</Logontype>
+			<PasvMode>MODE_DEFAULT</PasvMode>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>IIR</Name>
+			<RemoteDir>1 0 4 data</RemoteDir>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+		<Server>
+			<Host>sftp.platts.com</Host>
+			<Port>22</Port>
+			<Protocol>1</Protocol>
+			<Type>0</Type>
+			<User>henry_tindall_2</User>
+			<Pass encoding="base64">WFlJSWlpd25oMzIwODQpISQj</Pass>
+			<Logontype>1</Logontype>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>Platts</Name>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+		<Server>
+			<Host>ftp.rystadenergy.com</Host>
+			<Port>22</Port>
+			<Protocol>1</Protocol>
+			<Type>1</Type>
+			<User>ftpaltatradinguser01</User>
+			<Pass encoding="base64">NXRnYiVUR0IxcWF6IVFBWg==</Pass>
+			<Logontype>1</Logontype>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>Rystad</Name>
+			<RemoteDir>1 0</RemoteDir>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+		<Server>
+			<Host>itcsubmit.wustl.edu</Host>
+			<Port>22</Port>
+			<Protocol>1</Protocol>
+			<Type>0</Type>
+			<User>a</User>
+			<Pass encoding="base64" />
+			<Logontype>1</Logontype>
+			<EncodingType>Auto</EncodingType>
+			<BypassProxy>0</BypassProxy>
+			<Name>Test</Name>
+			<SyncBrowsing>0</SyncBrowsing>
+			<DirectoryComparison>0</DirectoryComparison>
+		</Server>
+	</Servers>
+</FileZilla3>
