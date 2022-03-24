@@ -21,6 +21,7 @@ namespace FtpReader.Console.ToFile
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env}.json", false)
                 .AddCommandLine(args)
+                .AddEnvironmentVariables()
                 .Build();
 
             //Initialize Logger
@@ -59,14 +60,17 @@ namespace FtpReader.Console.ToFile
         private static async Task Run(IServiceProvider serviceProvider, Options options)
         {
             var reader = serviceProvider.GetRequiredService<IConsumer<FileBroadcastArgs>>();
+
             FtpConsumerArgs args = new FtpConsumerArgs
             {
                 Host = options.Host,
                 Filenames = options.Filenames,
+                Filter = options.Filter,
+                GetLatest = options.GetLatest,
                 PrivateKeyFilePath = options.PrivateKeyPath,
                 RemotePath = options.RemotePath,
                 LocalPath = options.OutputPath,
-                Password = options.Password,
+                Password = !string.IsNullOrWhiteSpace(options.Password) ? options.Password : Environment.GetEnvironmentVariables()[options.PasswordEnvironmentVariable].ToString(),
                 Username = options.Username,
                 AuthType = options.AuthType,
                 Protocol = options.Protocol

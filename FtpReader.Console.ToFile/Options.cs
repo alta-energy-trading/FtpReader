@@ -26,6 +26,14 @@ namespace FtpReader.Console
           HelpText = "List of filenames.")]
         public IEnumerable<string> Filenames { get; set; }
 
+        [Option('x', "filter", Default = "",
+          HelpText = "Filter by this string.")]
+        public string Filter { get; set; }
+
+        [Option('l', "getLatest", Default = false,
+          HelpText = "Only get the latest file.")]
+        public bool GetLatest { get; set; }
+
         [Option('u', "username", Required = false,
           HelpText = "Username.")]
         public string Username { get; set; }
@@ -33,6 +41,10 @@ namespace FtpReader.Console
         [Option('p', "password", Required = false,
           HelpText = "Password.")]
         public string Password { get; set; }
+
+        [Option('e', "passwordEnvironmentVariable", Required = false,
+          HelpText = "The environment variable where the password is stored")]
+        public string PasswordEnvironmentVariable { get; set; }
 
         [Option('a', "authorisation", Default = AuthorisationTypeEnum.None,
           HelpText = "The type of authorisation")]

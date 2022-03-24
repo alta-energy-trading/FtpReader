@@ -1,0 +1,1 @@
+﻿-h ftp.industrialinfo.com  -o "F:\Data\IIR" -r /data/ -u arcadia -e iirftp -a Basic -c FTP -f unit*.ftp -x -l

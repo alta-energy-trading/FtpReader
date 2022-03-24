@@ -1,11 +1,12 @@
 ﻿using Reader.Core;
-using FtpReader.Extensions;
+using CoreFtp;
 using System;
 using System.Threading.Tasks;
 using Renci.SshNet;
 using System.IO;
 using Renci.SshNet.Sftp;
 using Renci.SshNet.Common;
+using System.Linq;
 
 namespace FtpReader
 {
@@ -21,12 +22,25 @@ namespace FtpReader
         {
             var ftpConsumerArgs = (FtpConsumerArgs)args;
 
+            // TODO: both these functions would ideally return a fileStream
+            // to then broadcast in this method, rather than in ReadFTP or ReadSFTP
             if (ftpConsumerArgs.Protocol == ProtocolEnum.FTP)
-                throw new NotImplementedException("FTP");
+                await ReadFTP(broadcasterArgs, ftpConsumerArgs);
+            else
+                await ReadSFTP(broadcasterArgs, ftpConsumerArgs);
+        }
 
+        /// <summary>
+        /// Use Renci.SshNet.Sftp to read the FTP and then broadcast
+        /// </summary>
+        /// <param name="broadcasterArgs"></param>
+        /// <param name="ftpConsumerArgs"></param>
+        /// <returns></returns>
+        private async Task ReadSFTP(TBroadcaster broadcasterArgs, FtpConsumerArgs ftpConsumerArgs)
+        {
             SftpClient client = null;
 
-            switch(ftpConsumerArgs.AuthType)
+            switch (ftpConsumerArgs.AuthType)
             {
                 case AuthorisationTypeEnum.Basic:
                     client = new SftpClient(ftpConsumerArgs.Host, ftpConsumerArgs.Username, ftpConsumerArgs.Password);
@@ -40,7 +54,7 @@ namespace FtpReader
 
             client.Connect();
 
-            foreach(var filename in ftpConsumerArgs.Filenames)
+            foreach (var filename in ftpConsumerArgs.Filenames)
                 try
                 {
                     using (SftpFileStream dataStream = client.OpenRead(Path.Combine(ftpConsumerArgs.RemotePath, filename)))
@@ -53,6 +67,80 @@ namespace FtpReader
 
             client.Disconnect();
             client.Dispose();
+        }
+
+        /// <summary>
+        /// User CoreFtp to read the FTP server and then pass the resulting stream to the broadcaster
+        /// </summary>
+        /// <param name="broadcasterArgs"></param>
+        /// <param name="ftpConsumerArgs"></param>
+        /// <returns></returns>
+        private async Task ReadFTP(TBroadcaster broadcasterArgs, FtpConsumerArgs ftpConsumerArgs)
+        {
+            switch (ftpConsumerArgs.AuthType)
+            {
+                case AuthorisationTypeEnum.Basic:                    
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            using (var client = new FtpClient(new FtpClientConfiguration
+            {
+                Host = ftpConsumerArgs.Host,
+                Username = ftpConsumerArgs.Username,
+                Password = ftpConsumerArgs.Password,
+                BaseDirectory = ftpConsumerArgs.RemotePath
+            }))
+            {
+                await client.LoginAsync();
+                
+                var allFiles = await client.ListFilesAsync();
+
+                var files = allFiles
+                    .Where(f => f.Name.ToLower().Contains(ftpConsumerArgs.Filter))
+                    .OrderByDescending(f => f.DateModified)
+                    .AsEnumerable();
+
+                if (ftpConsumerArgs.GetLatest)
+                {
+                    files = files.Take(1);
+                }
+
+                foreach (var file in files)
+                {
+                    SetOutputFileNameIfFileBroadcast(broadcasterArgs, file);
+
+                    try
+                    {
+                        using (var ftpReadStream = await client.OpenFileReadStreamAsync(Path.Combine(ftpConsumerArgs.RemotePath, file.Name)))
+                            await _broadCaster.Broadcast(ftpReadStream, broadcasterArgs);
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Broadcaster needs to know the filename if it is a FileBroadcaster
+        /// We can't access FileBroadcasterArgs from the Broadcaster as these are set at top level in the client
+        /// TODO: How can we get the two different types of Streams, Renci SSH and Core FTP to convert to a FileStream,
+        /// without loading all the file into memory? If we could do this, we could create a file stream in this class
+        /// and pass that to the FileBroadcaster
+        /// </summary>
+        /// <param name="broadcasterArgs"></param>
+        /// <param name="file"></param>
+        private static void SetOutputFileNameIfFileBroadcast(TBroadcaster broadcasterArgs, CoreFtp.Infrastructure.FtpNodeInformation file)
+        {
+            switch (typeof(TBroadcaster).Name)
+            {
+                case "FileBroadcastArgs":
+                    broadcasterArgs.GetType().GetProperty("FileName").SetValue(broadcasterArgs, file.Name);
+                    break;
+            }
         }
     }
 }

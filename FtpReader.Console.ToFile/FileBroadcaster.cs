@@ -15,23 +15,22 @@ namespace FtpReader.Console.ToFile
             string filePath = args.OutputPath;
 
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                try
-                {
-                    SftpFileStream fileStream = (SftpFileStream)stream;
-
-                    var fileName = fileStream.Name.Split("/").Last();
-
-                    filePath = Path.Combine(filePath, fileName);
-                }
-                catch(Exception e)
-                {
-                    throw e;
-                }
+            {              
+                filePath = Path.Combine(filePath, args.FileName);
 
                 using (var file = File.Create(filePath))
                 {
-                    stream.Seek(0, SeekOrigin.Begin);
+                    try
+                    {
+                        stream.Seek(0, SeekOrigin.Begin);
+                        
+                    }
+                    catch(Exception e)
+                    {
+                        // TODO: Why does CoreFtp (https://github.com/sparkeh9/CoreFTP) not allow Seek?
+                        // Safe to ignore error as the streeam is at the beginning
+                    }
+
                     stream.CopyTo(file);
                 }
             }
