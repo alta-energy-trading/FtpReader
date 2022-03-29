@@ -54,9 +54,14 @@ namespace FtpReader
 
             client.Connect();
 
+            if (!string.IsNullOrWhiteSpace(ftpConsumerArgs.Filter))
+                throw new NotImplementedException("Filtering not implemented for SFTP");
+
             foreach (var filename in ftpConsumerArgs.Filenames)
                 try
                 {
+                    SetOutputFileNameIfFileBroadcast(broadcasterArgs, filename);
+
                     using (SftpFileStream dataStream = client.OpenRead(Path.Combine(ftpConsumerArgs.RemotePath, filename)))
                         await _broadCaster.Broadcast(dataStream, broadcasterArgs);
                 }
@@ -109,7 +114,7 @@ namespace FtpReader
 
                 foreach (var file in files)
                 {
-                    SetOutputFileNameIfFileBroadcast(broadcasterArgs, file);
+                    SetOutputFileNameIfFileBroadcast(broadcasterArgs, file.Name);
 
                     try
                     {
@@ -133,12 +138,12 @@ namespace FtpReader
         /// </summary>
         /// <param name="broadcasterArgs"></param>
         /// <param name="file"></param>
-        private static void SetOutputFileNameIfFileBroadcast(TBroadcaster broadcasterArgs, CoreFtp.Infrastructure.FtpNodeInformation file)
+        private static void SetOutputFileNameIfFileBroadcast(TBroadcaster broadcasterArgs, string filename)
         {
             switch (typeof(TBroadcaster).Name)
             {
                 case "FileBroadcastArgs":
-                    broadcasterArgs.GetType().GetProperty("FileName").SetValue(broadcasterArgs, file.Name);
+                    broadcasterArgs.GetType().GetProperty("FileName").SetValue(broadcasterArgs, filename);
                     break;
             }
         }
