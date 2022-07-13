@@ -10,6 +10,7 @@ namespace FtpReader
         public string RemotePath { get; set; }
         public IEnumerable<string> Filenames { get; set; }
         public string Filter { get; set; }
+        public string Exclude { get; set; }
         public bool GetLatest { get; set; }
         public ProtocolEnum Protocol { get; set; }
     }

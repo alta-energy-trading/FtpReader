@@ -7,6 +7,7 @@ using System.IO;
 using Renci.SshNet.Sftp;
 using Renci.SshNet.Common;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FtpReader
 {
@@ -57,18 +58,37 @@ namespace FtpReader
             if (!string.IsNullOrWhiteSpace(ftpConsumerArgs.Filter))
                 throw new NotImplementedException("Filtering not implemented for SFTP");
 
-            foreach (var filename in ftpConsumerArgs.Filenames)
-                try
-                {
-                    SetOutputFileNameIfFileBroadcast(broadcasterArgs, filename);
+            var allFiles = client.ListDirectory(ftpConsumerArgs.RemotePath);
 
-                    using (SftpFileStream dataStream = client.OpenRead(Path.Combine(ftpConsumerArgs.RemotePath, filename)))
-                        await _broadCaster.Broadcast(dataStream, broadcasterArgs);
-                }
-                catch (SftpPathNotFoundException e)
+            foreach (var filename in ftpConsumerArgs.Filenames)
+            {
+
+                List<string> parts = filename.Split("*").ToList();
+                var files = allFiles
+                    .Where(f => parts.All(p => f.Name.ToLower().Contains(p) && string.IsNullOrWhiteSpace(ftpConsumerArgs.Exclude) || !f.Name.Contains(ftpConsumerArgs.Exclude)))
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .AsEnumerable();
+
+                if (ftpConsumerArgs.GetLatest)
                 {
-                    throw new Exception(e.Message);
+                    files = files.Take(1);
                 }
+
+                foreach (var file in files)
+                {
+                    try
+                    {
+                        SetOutputFileNameIfFileBroadcast(broadcasterArgs, file.Name);
+
+                        using (SftpFileStream dataStream = client.OpenRead(Path.Combine(ftpConsumerArgs.RemotePath, file.Name)))
+                            await _broadCaster.Broadcast(dataStream, broadcasterArgs);
+                    }
+                    catch (SftpPathNotFoundException e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+                }
+            }
 
             client.Disconnect();
             client.Dispose();
@@ -80,7 +100,7 @@ namespace FtpReader
         /// <param name="broadcasterArgs"></param>
         /// <param name="ftpConsumerArgs"></param>
         /// <returns></returns>
-        private async Task ReadFTP(TBroadcaster broadcasterArgs, FtpConsumerArgs ftpConsumerArgs)
+        public async Task ReadFTP(TBroadcaster broadcasterArgs, FtpConsumerArgs ftpConsumerArgs)
         {
             switch (ftpConsumerArgs.AuthType)
             {

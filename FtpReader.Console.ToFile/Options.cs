@@ -26,9 +26,13 @@ namespace FtpReader.Console
           HelpText = "List of filenames.")]
         public IEnumerable<string> Filenames { get; set; }
 
-        [Option('x', "filter", Default = "",
+        [Option('i', "filter", Default = "",
           HelpText = "Filter by this string.")]
         public string Filter { get; set; }
+
+        [Option('x', "exclude", Default = "",
+          HelpText = "Exclude this string.")]
+        public string Exclude { get; set; }
 
         [Option('l', "getLatest", Default = false,
           HelpText = "Only get the latest file.")]
