@@ -2,7 +2,7 @@
   "profiles": {
     "FtpReader.Console.ToFile": {
       "commandName": "Project",
-      "commandLineArgs": "-h eft.tradingtechnologies.com  -o \"F:\\Data\\TT\" -k C:\\Users\\henryt\\.ssh\\id_rsa -f \"cme_tt*.zip\" -u tt_company_1052785 -a PublicPrivatekey -c SFTP -l -x \".txt\""
+      "commandLineArgs": "-h eft.tradingtechnologies.com  -o \"F:\\Data\\TT\" -k C:\\Users\\henryt\\.ssh\\id_rsa -f \"eex*.zip\" -u tt_company_1052785 -a PublicPrivatekey -c SFTP -l -x \".txt\""
     }
   }
 }
