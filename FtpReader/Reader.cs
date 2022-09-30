@@ -62,10 +62,9 @@ namespace FtpReader
 
             foreach (var filename in ftpConsumerArgs.Filenames)
             {
-
                 List<string> parts = filename.Split("*").ToList();
                 var files = allFiles
-                    .Where(f => parts.All(p => f.Name.Equals(p, StringComparison.InvariantCultureIgnoreCase) && (string.IsNullOrWhiteSpace(ftpConsumerArgs.Exclude) || !f.Name.Contains(ftpConsumerArgs.Exclude))))
+                    .Where(f => parts.All(p => f.Name.Contains(p, StringComparison.InvariantCultureIgnoreCase) && (string.IsNullOrWhiteSpace(ftpConsumerArgs.Exclude) || !f.Name.Contains(ftpConsumerArgs.Exclude))))
                     .OrderByDescending(f => f.LastWriteTime)
                     .AsEnumerable();
 
